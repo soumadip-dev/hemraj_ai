@@ -5,12 +5,11 @@ dotenv.config();
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(8080),
-  NODE_ENV: z.string().default('development'),
   DATABASE_URL: z.string().default(''),
-  JWT_SECRET: z.string().min(1, 'JWT_SECRET is required'),
-  JWT_ACCESS_EXPIRES_IN: z.string().default('1h'),
-  REDIS_URL: z.string().default(''),
+
+  NODE_ENV: z.string().default('development'),
   LOG_LEVEL: z.string().default('info'),
+
   CORS_ORIGINS: z
     .string()
     .default('')
@@ -20,6 +19,12 @@ const envSchema = z.object({
         .map(origin => origin.trim())
         .filter(Boolean)
     ),
+  JWT_SECRET: z.string().default('secret'),
+  JWT_ACCESS_TOKEN_SECRET: z.string().default('secret-ai'),
+  JWT_ACCESS_TOKEN_EXPIRY: z.string().default('1d'),
+  JWT_REFRESH_TOKEN_SECRET: z.string().default('ai-secret'),
+  JWT_REFRESH_TOKEN_EXPIRY: z.string().default('10d'),
+  REDIS_URL: z.string().default(''),
 });
 
 export const env = envSchema.parse(process.env);
