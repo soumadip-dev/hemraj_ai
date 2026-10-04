@@ -29,16 +29,6 @@ export const authenticate = async (
     // get the user from the token(id)
     const user = await findUserById(decodedToken.id);
 
-    // } catch (err) {
-    //   if (err instanceof jwt.TokenExpiredError) {
-    //     throw new AppError(401, 'Access token expired. Please refresh.');
-    //   }
-    //   if (err instanceof jwt.JsonWebTokenError) {
-    //     throw new AppError(401, 'Invalid access token.');
-    //   }
-    //   throw new AppError(401, 'Authentication failed.');
-    // }
-
     if (!user) {
       throw new AppError(401, 'User no longer exists.');
     }
