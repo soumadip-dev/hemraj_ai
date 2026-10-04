@@ -6,7 +6,7 @@ export const createFollowupSchema = z.object({
 
   assignedTo: z.uuid('Invalid assigned user ID'),
 
-  type: z.enum(['payment_reminder', 'call', 'email', 'escalation']),
+  type: z.enum(['call', 'email', 'escalation']),
 
   followUpDate: z.coerce.date('Invalid follow-up date'),
 
