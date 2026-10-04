@@ -8,6 +8,7 @@ import {
 } from '../validator/debtor.validator';
 import { getDebtorsQuery, getDebtorByIdQuery } from '../repositories/debtor.repositories';
 import { getDebtorTransactionsQuery } from '../repositories/transaction.repositories';
+import { cacheDebtors, createDebtorCacheKey, getCachedDebtors } from '../utils/debtorCache.util';
 
 // get all debtors
 export const getDebtors = async (
@@ -25,7 +26,27 @@ export const getDebtors = async (
     // Validate query parameters
     const filters = getDebtorsSchema.parse(req.query);
 
-    // Get data
+    const cacheKey = createDebtorCacheKey({
+      role: req.user.role,
+      departmentId: req.user.departmentId,
+      filters,
+    });
+
+    // check if debtors are cached
+    const cachedDebtors = await getCachedDebtors(cacheKey);
+
+    if (cachedDebtors) {
+      logger.info('Returning cached debtors');
+      res.status(200).json({
+        success: true,
+        message: 'Debtors fetched successfully',
+        data: cachedDebtors,
+      });
+
+      return;
+    }
+
+    // Get data (cache miss)
     const result = await getDebtorsQuery(req.user.role, req.user.departmentId, filters);
 
     // Convert null values to simple values for response
@@ -39,18 +60,22 @@ export const getDebtors = async (
       credit_limit: Number(debtor.credit_limit),
     }));
 
+    const responseData = {
+      debtors,
+
+      pagination: {
+        page: result.page,
+        limit: result.limit,
+      },
+    };
+    // cache debtors
+    await cacheDebtors(cacheKey, responseData);
+
     res.status(200).json({
       success: true,
       message: 'Debtors fetched successfully',
 
-      data: {
-        debtors,
-
-        pagination: {
-          page: result.page,
-          limit: result.limit,
-        },
-      },
+      data: responseData,
     });
   } catch (error) {
     logger.error(error);
