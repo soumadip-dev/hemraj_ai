@@ -162,12 +162,14 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
 export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   logger.info('Logging out user...');
   try {
-    const userId = req.user?.id;
+    if (!req.user) {
+      throw new AppError(401, 'Unauthorized request');
+    }
 
-    // 1. DB se refresh token delete karo
+    const userId = req.user.id;
+
     await deleteRefreshToken(userId);
 
-    // 2. Cookies clear karo
     res.clearCookie('accessToken', accessCookieOptions);
     res.clearCookie('refreshToken', refreshCookieOptions);
 
@@ -233,6 +235,9 @@ export const refreshAccessToken = async (
 export const profile = async (req: Request, res: Response, next: NextFunction) => {
   logger.info('Getting user profile...');
   try {
+    if (!req.user) {
+      throw new AppError(401, 'Unauthorized request');
+    }
     const userId = req.user.id;
     const user = await findUserById(userId);
 

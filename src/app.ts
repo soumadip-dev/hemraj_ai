@@ -9,9 +9,24 @@ import { NotFound } from './middleware/notFound.middleware';
 import { errorHandler } from './middleware/errorhandler.middleware';
 import { apiRouter } from './routes';
 import { auditMiddleware } from './middleware/audit.middleware';
+import http from 'http';
+import { Server } from 'socket.io';
+import { env } from './config/env.config';
 
 export function createApp() {
   const app = express();
+  const server = http.createServer(app);
+
+  const io = new Server(server, {
+    cors: {
+      origin: env.CLIENT_URL,
+      credentials: true,
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    },
+  });
+
+  // Set the io instance on the app
+  app.set('io', io);
 
   app.use(configCors());
   app.use(helmet());
@@ -26,5 +41,5 @@ export function createApp() {
   app.use(NotFound);
   app.use(errorHandler);
 
-  return app;
+  return { server, io };
 }

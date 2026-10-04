@@ -25,6 +25,7 @@ const envSchema = z.object({
   JWT_REFRESH_TOKEN_SECRET: z.string().default('ai-secret'),
   JWT_REFRESH_TOKEN_EXPIRY: z.string().default('10d'),
   REDIS_URL: z.string().default(''),
+  CLIENT_URL: z.string().default('http://localhost:5173'),
 });
 
 export const env = envSchema.parse(process.env);

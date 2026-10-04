@@ -220,6 +220,9 @@ export const updateFollowupController = async (
       input.followUpDate,
       input.note
     );
+    const io = req.app.get('io');
+
+    io.emit('followup:updated', updatedFollowup);
 
     res.status(200).json({
       success: true,
