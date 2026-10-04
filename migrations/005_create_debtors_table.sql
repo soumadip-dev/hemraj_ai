@@ -20,7 +20,6 @@ CREATE TABLE debtors (
     credit_limit NUMERIC(14,2) NOT NULL DEFAULT 0
         CHECK (credit_limit >= 0),
 
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 

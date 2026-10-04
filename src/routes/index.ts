@@ -3,7 +3,7 @@
 
 import { Router } from 'express';
 import { healthRouter } from './health.routes';
-// import { authRouter } from './auth.routes';
+import { authRouter } from './auth.routes';
 // import { chatRouter } from './chat.routes';
 // import { authenticateToken } from '../middlewares/token-auth.middleware';
 // import { authenticateUser } from '../middlewares/user-auth.middleware';
@@ -13,7 +13,7 @@ import { healthRouter } from './health.routes';
 export const apiRouter = Router();
 
 apiRouter.use(healthRouter);
-// apiRouter.use('/auth', authRouter);
+apiRouter.use('/auth', authRouter);
 
 // apiRouter.use(
 //   '/chat',
