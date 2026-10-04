@@ -10,11 +10,11 @@ const baseCookieOptions: CookieOptions = {
 // Access token cookie — 15 minutes
 export const accessCookieOptions: CookieOptions = {
   ...baseCookieOptions,
-  maxAge: 15 * 60 * 1000, // 15 min
+  maxAge: 1 * 24 * 60 * 60 * 1000, // 1 day
 };
 
 // Refresh token cookie — 7 days
 export const refreshCookieOptions: CookieOptions = {
   ...baseCookieOptions,
-  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  maxAge: 10 * 24 * 60 * 60 * 1000, // 7 days
 };
