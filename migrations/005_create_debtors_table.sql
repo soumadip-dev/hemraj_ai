@@ -20,8 +20,5 @@ CREATE TABLE debtors (
     credit_limit NUMERIC(14,2) NOT NULL DEFAULT 0
         CHECK (credit_limit >= 0),
 
-
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

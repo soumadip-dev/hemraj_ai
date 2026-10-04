@@ -13,31 +13,15 @@ CREATE TABLE followups (
         REFERENCES users(id)
         ON DELETE RESTRICT,
 
-    type VARCHAR(30) NOT NULL DEFAULT 'payment_reminder'
-        CHECK (
-            type IN (
-                'payment_reminder',
-                'call',
-                'email',
-                'escalation'
-            )
-        ),
+    type VARCHAR(20) NOT NULL
+        CHECK (type IN ('call', 'email', 'escalation')),
 
     status VARCHAR(20) NOT NULL DEFAULT 'pending'
-        CHECK (
-            status IN (
-                'pending',
-                'in_progress',
-                'done',
-                'cancelled'
-            )
-        ),
+        CHECK (status IN ('pending', 'in_progress', 'done', 'cancelled')),
 
     follow_up_date DATE NOT NULL,
 
     note TEXT,
 
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
