@@ -56,3 +56,11 @@ ON followups(status, follow_up_date);
 
 CREATE INDEX idx_feedback_message_id
 ON feedback(message_id);
+
+-- AUDIT LOGS
+
+CREATE INDEX idx_audit_logs_user_id
+ON audit_logs(user_id);
+
+CREATE INDEX idx_audit_logs_created_at
+ON audit_logs(created_at);

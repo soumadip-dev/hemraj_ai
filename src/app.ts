@@ -4,11 +4,11 @@
 import express from 'express';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
-
 import { configCors } from './config/cors.config';
 import { NotFound } from './middleware/notFound.middleware';
 import { errorHandler } from './middleware/errorhandler.middleware';
 import { apiRouter } from './routes';
+import { auditMiddleware } from './middleware/audit.middleware';
 
 export function createApp() {
   const app = express();
@@ -18,6 +18,7 @@ export function createApp() {
   app.use(cookieParser());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(auditMiddleware);
 
   // routes
   app.use('/api', apiRouter);

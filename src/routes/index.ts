@@ -6,6 +6,7 @@ import { agentRouter } from './agent.routes';
 import { sessionRouter } from './session.routes';
 import { followupRouter } from './followup.routes';
 import { feedbackRouter } from './feedback.routes';
+import { auditRouter } from './audit.routes';
 
 export const apiRouter = Router();
 
@@ -16,3 +17,4 @@ apiRouter.use('/agent', agentRouter);
 apiRouter.use('/sessions', sessionRouter);
 apiRouter.use('/followups', followupRouter);
 apiRouter.use('/feedback', feedbackRouter);
+apiRouter.use('/audit-logs', auditRouter);
