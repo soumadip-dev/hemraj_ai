@@ -2,6 +2,7 @@
 
 import { createApp } from './app';
 import { env } from './config/env.config';
+import { connectRedis, disconnectRedis } from './config/redis.config';
 import { logger } from './lib/logger.lib';
 
 const app = createApp();
@@ -10,7 +11,8 @@ const PORT = env.PORT || 8080;
 
 async function startServer() {
   try {
-    // await connectRedis();
+    await connectRedis();
+
     const server = app.listen(PORT, () => {
       logger.info(`Server listening at http://localhost:${PORT} 🌐`);
     });
@@ -20,7 +22,7 @@ async function startServer() {
       logger.info(`${signal} received. Shutting down server...`);
 
       server.close(async () => {
-        // await disconnectRedis();
+        await disconnectRedis();
         logger.info('Server shut down successfully');
         process.exit(0);
       });
