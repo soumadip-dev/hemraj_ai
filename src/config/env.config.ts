@@ -26,6 +26,8 @@ const envSchema = z.object({
   JWT_REFRESH_TOKEN_EXPIRY: z.string().default('10d'),
   REDIS_URL: z.string().default(''),
   CLIENT_URL: z.string().default('http://localhost:5173'),
+  LLM_MODEL_NAME: z.string().default('gemini-3.5-flash-lite'),
+  GEMINI_API_KEY: z.string().default(''),
 });
 
 export const env = envSchema.parse(process.env);

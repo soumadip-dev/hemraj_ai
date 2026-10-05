@@ -115,32 +115,3 @@ export const getDebtorByIdQuery = async (
 
   return result.rows[0] ?? null;
 };
-
-// export const checkDebtorAccessQuery = async (
-//   debtorId: string,
-//   userRole: string,
-//   userDepartmentId: string
-// ) => {
-//   const values: string[] = [debtorId];
-
-//   let departmentCondition = '';
-
-//   if (userRole !== 'admin') {
-//     values.push(userDepartmentId);
-
-//     departmentCondition = `
-//       AND department_id = $2
-//     `;
-//   }
-
-//   const query = `
-//     SELECT id
-//     FROM debtors
-//     WHERE id = $1
-//     ${departmentCondition}
-//   `;
-
-//   const result = await pool.query(query, values);
-
-//   return result.rows[0] ?? null;
-// };

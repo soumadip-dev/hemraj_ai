@@ -43,6 +43,9 @@ services:
       JWT_REFRESH_TOKEN_SECRET: ${JWT_REFRESH_TOKEN_SECRET}
       JWT_REFRESH_TOKEN_EXPIRY: ${JWT_REFRESH_TOKEN_EXPIRY:-10d}
 
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      LLM_MODEL_NAME: ${LLM_MODEL_NAME:-gemini-3.5-flash-lite}
+
     depends_on:
       - postgres
       - redis
