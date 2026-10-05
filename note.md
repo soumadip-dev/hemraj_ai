@@ -111,3 +111,7 @@ Does it have a due date/ last payment date?
        ↓
 Is it overdue by at least 30 days / last payment date exceeds 30 days?
 ```
+
+SEED DOCUMENT :
+
+docker compose run --rm server bun run src/seed/seedDepartments.ts
