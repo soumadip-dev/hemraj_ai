@@ -12,6 +12,8 @@ export const getDebtorsSchema = z.object({
 
   dateTo: z.coerce.date().optional(),
 
+  minAgeingDays: z.coerce.number().int().min(0).optional(),
+
   page: z
     .string()
     .regex(/^\d+$/)

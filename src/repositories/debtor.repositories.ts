@@ -7,7 +7,7 @@ export const getDebtorsQuery = async (
   userDepartmentId: string,
   filters: GetDebtorsInput
 ) => {
-  const { page, limit, search, riskLevel, priority, dateFrom, dateTo } = filters;
+  const { page, limit, search, riskLevel, priority, dateFrom, dateTo, minAgeingDays } = filters;
 
   // Calculate pagination offset.
   const offset = (page - 1) * limit;
@@ -23,6 +23,7 @@ export const getDebtorsQuery = async (
     priority ?? null,
     dateFrom ?? null,
     dateTo ?? null,
+    minAgeingDays ?? null,
     limit,
     offset,
   ];
@@ -60,8 +61,16 @@ export const getDebtorsQuery = async (
       AND ($4::VARCHAR IS NULL OR d.priority = $4::VARCHAR)
       AND ($5::DATE IS NULL OR d.created_at::DATE >= $5::DATE)
       AND ($6::DATE IS NULL OR d.created_at::DATE <= $6::DATE)
-    LIMIT $7
-    OFFSET $8;
+      AND ($7::INTEGER IS NULL OR EXISTS(
+      SELECT 1 FROM transactions t2 WHERE t2.debtor_id = d.id
+      AND t2.type = 'invoice'
+      AND t2.outstanding_amount > 0
+      AND t2.due_date IS NOT NULL
+      AND t2.due_date < CURRENT_DATE
+      AND CURRENT_DATE - t2.due_date >= $7::INTEGER
+      ))
+    LIMIT $8
+    OFFSET $9;
   `;
 
   const result = await pool.query(query, values);
