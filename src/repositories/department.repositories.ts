@@ -3,11 +3,8 @@ import { pool } from '../config/database.config';
 // check if department exists
 export const checkDepartmentExists = async (departmentId: string) => {
   const query = `
-    SELECT
-      id,
-      name,
-      created_at,
-      updated_at
+    SELECT id,
+      name, created_at, updated_at 
     FROM departments
     WHERE id = $1
   `;

@@ -9,13 +9,7 @@ export const createAuditLog = async (
 ) => {
   const query = `
     INSERT INTO audit_logs (user_id, action, method, path, status_code)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING id,user_id,
-      action,
-      method,
-      path,
-      status_code,
-      created_at;
+    VALUES ($1, $2, $3, $4, $5) RETURNING id,user_id, action, method, path, status_code, created_at;
       `;
 
   const result = await pool.query(query, [userId, action, method, path, statusCode]);
@@ -31,11 +25,7 @@ export const getAuditLogs = async (
 ) => {
   const offset = (page - 1) * limit;
 
-  const query = `
-    SELECT
-      a.id,
-      a.user_id,
-      u.full_name AS user_name,
+  const query = `SELECT a.id, a.user_id, u.full_name AS user_name,
       u.department_id,
       a.action,
       a.method,
@@ -48,9 +38,7 @@ export const getAuditLogs = async (
     WHERE
       ($1::UUID IS NULL OR u.department_id = $1::UUID)
       AND ($2::UUID IS NULL OR a.user_id = $2::UUID)
-    ORDER BY a.created_at DESC
-    LIMIT $3
-    OFFSET $4;
+    ORDER BY a.created_at DESC LIMIT $3 OFFSET $4;
   `;
 
   const result = await pool.query(query, [departmentId, userId, limit, offset]);

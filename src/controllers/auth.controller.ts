@@ -28,33 +28,27 @@ const LOCK_DURATION_MINUTES = 15;
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   logger.info('Registering user...');
   try {
-    // 1. Validate body — .parse() throws ZodError on failure
     const parsedBody = registerSchema.parse(req.body);
 
     const { fullName, email, password, departmentId } = parsedBody;
 
-    // 2. Check department
     const department = await checkDepartmentExists(departmentId);
     if (!department) {
       throw new AppError(400, 'Department does not exist');
     }
 
-    // 3. Check duplicate email
     const existingUser = await findUserByEmail(email);
     if (existingUser) {
       throw new AppError(409, 'Email already registered');
     }
 
-    // 4. Default role
     const role = await findRoleByName(DEFAULT_ROLE);
     if (!role) {
       throw new AppError(500, 'Default role not configured');
     }
 
-    // 5. Hash password
     const passwordHash = await hashPassword(password);
 
-    // 6. Create user
     const newUser = await createUser({
       fullName,
       email,
@@ -63,7 +57,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
       roleId: role.id,
     });
 
-    // 7. Send response
     res.status(201).json({
       success: true,
       message: 'Registration successful. Please log in.',
@@ -83,7 +76,6 @@ export const register = async (req: Request, res: Response, next: NextFunction):
       },
     });
   } catch (error) {
-    // 8. Log + delegate to centralized error handler
     logger.error(error);
     next(error);
   }
@@ -173,7 +165,6 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
     res.clearCookie('accessToken', accessCookieOptions);
     res.clearCookie('refreshToken', refreshCookieOptions);
 
-    // 3. Response bhejo
     res.status(200).json({
       success: true,
       message: 'Logged out successfully',
